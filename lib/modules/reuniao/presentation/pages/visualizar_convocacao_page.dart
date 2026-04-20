@@ -53,14 +53,17 @@ class _VisualizarConvocacaoPageState extends State<VisualizarConvocacaoPage> {
         ],
       ),
       body: PdfPreview(
-        build: (format) => _pdfGeneratorService.gerarConvocacao(_reuniao!).save(),
+        build: (format) async {
+          final doc = await _pdfGeneratorService.gerarConvocacao(_reuniao!);
+          return doc.save();
+        },
         canDebug: false,
       ),
     );
   }
 
   Future<void> _imprimirOuCompartilhar() async {
-    final pdf = _pdfGeneratorService.gerarConvocacao(_reuniao!);
+    final pdf = await _pdfGeneratorService.gerarConvocacao(_reuniao!);
     await Printing.sharePdf(
       bytes: await pdf.save(),
       filename:

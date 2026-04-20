@@ -43,8 +43,10 @@ class _VisualizarAtaPageState extends State<VisualizarAtaPage> {
               child: Text('Ata não encontrada'),
             )
           : PdfPreview(
-              build: (format) =>
-                  _pdfGeneratorService.gerarAta(_ata!).save(),
+              build: (format) async {
+                final doc = await _pdfGeneratorService.gerarAta(_ata!);
+                return doc.save();
+              },
               canDebug: false,
             ),
     );
@@ -53,7 +55,7 @@ class _VisualizarAtaPageState extends State<VisualizarAtaPage> {
   Future<void> _imprimirOuCompartilhar() async {
     if (_ata == null) return;
 
-    final pdf = _pdfGeneratorService.gerarAta(_ata!);
+    final pdf = await _pdfGeneratorService.gerarAta(_ata!);
     await Printing.sharePdf(
       bytes: await pdf.save(),
       filename:
