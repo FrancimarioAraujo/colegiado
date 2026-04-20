@@ -70,6 +70,155 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
     }
   }
 
+  Future<void> _editarReuniao() async {
+    final numeroController = TextEditingController(text: _reuniao!.numero);
+    final tipoController = TextEditingController(text: _reuniao!.tipo);
+    DateTime selectedDate = _reuniao!.data;
+    final horaController = TextEditingController(text: _reuniao!.hora);
+    final localController = TextEditingController(text: _reuniao!.local);
+    int statusSelecionado = _reuniao!.status;
+    final notasController = TextEditingController(text: _reuniao!.notas ?? '');
+    final formKey = GlobalKey<FormState>();
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Editar Reunião'),
+              content: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        controller: numeroController,
+                        decoration: const InputDecoration(labelText: 'Número'),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) return 'Informe o número';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: tipoController,
+                        decoration: const InputDecoration(labelText: 'Tipo'),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) return 'Informe o tipo';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2101),
+                          );
+                          if (picked != null && picked != selectedDate) {
+                            setState(() {
+                              selectedDate = picked;
+                            });
+                          }
+                        },
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            labelText: 'Data',
+                            suffixIcon: Icon(Icons.calendar_today),
+                          ),
+                          child: Text(DateFormatter.formatDate(selectedDate)),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: horaController,
+                        decoration: const InputDecoration(labelText: 'Hora'),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) return 'Informe a hora';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: localController,
+                        decoration: const InputDecoration(labelText: 'Local'),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) return 'Informe o local';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<int>(
+                        value: statusSelecionado,
+                        items: StatusReuniao.values
+                            .map(
+                              (status) => DropdownMenuItem(
+                                value: status.index,
+                                child: Text(_statusToString(status)),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            statusSelecionado = value;
+                          }
+                        },
+                        decoration: const InputDecoration(labelText: 'Status'),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: notasController,
+                        maxLines: 3,
+                        decoration: const InputDecoration(labelText: 'Notas'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    if (formKey.currentState?.validate() ?? false) {
+                      final reuniaoAtualizada = _reuniao!.copyWith(
+                        numero: numeroController.text,
+                        tipo: tipoController.text,
+                        data: selectedDate,
+                        hora: horaController.text,
+                        local: localController.text,
+                        status: statusSelecionado,
+                        notas: notasController.text.isEmpty ? null : notasController.text,
+                        dataAtualizacao: DateTime.now(),
+                      );
+
+                      await _atualizarReuniaoModelo(reuniaoAtualizada);
+                      if (mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Reunião atualizada com sucesso'),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('Salvar'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _editarPauta(PautaModel pauta, int index) async {
     final numeroController = TextEditingController(
       text: pauta.numero.toString(),
@@ -496,9 +645,18 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${_reuniao!.numero} Reunião ${_reuniao!.tipo}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${_reuniao!.numero} Reunião ${_reuniao!.tipo}',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: _editarReuniao,
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             _buildInfoRow('Data:', DateFormatter.formatDate(_reuniao!.data)),

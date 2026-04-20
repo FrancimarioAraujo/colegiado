@@ -104,13 +104,14 @@ class PdfGeneratorService {
                           fontSize: 10,
                           fontWeight: pw.FontWeight.bold,
                         ),
+                        textAlign: pw.TextAlign.left,
                       ),
                       if (pauta.descricao.isNotEmpty) ...[
                         pw.SizedBox(height: 2),
                         pw.Text(
                           pauta.descricao,
                           style: pw.TextStyle(fontSize: 9),
-                          textAlign: pw.TextAlign.justify,
+                          textAlign: pw.TextAlign.left,
                         ),
                       ],
                       if (pauta.processoSei != null &&
@@ -119,6 +120,7 @@ class PdfGeneratorService {
                         pw.Text(
                           'Processo SEI: ${pauta.processoSei}',
                           style: pw.TextStyle(fontSize: 9),
+                          textAlign: pw.TextAlign.left,
                         ),
                       ],
                     ],
@@ -254,13 +256,14 @@ class PdfGeneratorService {
                           fontSize: 10,
                           fontWeight: pw.FontWeight.bold,
                         ),
+                        textAlign: pw.TextAlign.left,
                       ),
                       if (pauta.descricao.isNotEmpty) ...[
                         pw.SizedBox(height: 3),
                         pw.Text(
                           'Descrição: ${pauta.descricao}',
                           style: pw.TextStyle(fontSize: 9),
-                          textAlign: pw.TextAlign.justify,
+                          textAlign: pw.TextAlign.left,
                         ),
                       ],
                       if (pauta.solicitante != null &&
@@ -269,6 +272,7 @@ class PdfGeneratorService {
                         pw.Text(
                           'Solicitante: ${pauta.solicitante}',
                           style: pw.TextStyle(fontSize: 9),
+                          textAlign: pw.TextAlign.left,
                         ),
                       ],
                       if (pauta.relator != null && pauta.relator!.isNotEmpty) ...[
@@ -276,6 +280,7 @@ class PdfGeneratorService {
                         pw.Text(
                           'Relator: ${pauta.relator}',
                           style: pw.TextStyle(fontSize: 9),
+                          textAlign: pw.TextAlign.left,
                         ),
                       ],
                       if (pauta.decisao != null && pauta.decisao!.isNotEmpty) ...[
@@ -286,6 +291,7 @@ class PdfGeneratorService {
                             fontSize: 9,
                             fontWeight: pw.FontWeight.bold,
                           ),
+                          textAlign: pw.TextAlign.left,
                         ),
                       ],
                     ],

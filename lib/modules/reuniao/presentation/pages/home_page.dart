@@ -27,6 +27,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Reuniões do Colegiado'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.people),
+            tooltip: 'Gerenciar Pessoas',
+            onPressed: () => Modular.to.pushNamed('/pessoas'),
+          ),
+        ],
       ),
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
