@@ -103,12 +103,36 @@ class PdfGeneratorService {
 
               pw.SizedBox(height: 25),
 
-              pw.Paragraph(
-                text:
-                    '    Convocamos Vossa Senhoria para a ${reuniao.numero} Reunião ${reuniao.tipo} do Colegiado do Programa de Pós-Graduação em Engenharia Elétrica, a realizar-se no dia ${DateFormatter.formatDateLong(reuniao.data)}, às ${reuniao.hora}, em ${reuniao.local}.',
-                style: _base,
-                textAlign: pw.TextAlign.justify,
-              ),
+              pw.RichText(
+  text: pw.TextSpan(
+    style: _base,
+    children: [
+      pw.TextSpan(
+        text:
+            'Convocamos Vossa Senhoria para a ${reuniao.numero} Reunião ${reuniao.tipo} do Colegiado do Programa de Pós-Graduação em Engenharia Elétrica, a realizar-se no dia ',
+      ),
+
+      // DATA EM NEGRITO
+      pw.TextSpan(
+        text: DateFormatter.formatDateLong(reuniao.data),
+        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+      ),
+
+      pw.TextSpan(text: ', às '),
+
+      // HORA EM NEGRITO
+      pw.TextSpan(
+        text: "${reuniao.hora} horas",
+        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+      ),
+
+      pw.TextSpan(
+        text: ', em ${reuniao.local}.',
+      ),
+    ],
+  ),
+  textAlign: pw.TextAlign.justify,
+),
 
               pw.SizedBox(height: 15),
 
