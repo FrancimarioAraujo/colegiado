@@ -154,7 +154,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                       });
                     },
                   ),
-                  const Text('Ad referendum'),
+                  const Text('Ad Referendum'),
                   SizedBox(width: 24),
                   Checkbox(
                     value: _fixado,
