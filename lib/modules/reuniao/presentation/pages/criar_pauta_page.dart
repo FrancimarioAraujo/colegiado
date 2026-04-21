@@ -26,6 +26,9 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
   final _relatorController = TextEditingController();
   final _decisaoController = TextEditingController();
 
+  bool _adReferendum = false;
+  bool _fixado = false;
+
   ReuniaoModel? _reuniao;
 
   @override
@@ -140,6 +143,30 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                   border: OutlineInputBorder(),
                 ),
               ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Checkbox(
+                    value: _adReferendum,
+                    onChanged: (value) {
+                      setState(() {
+                        _adReferendum = value ?? false;
+                      });
+                    },
+                  ),
+                  const Text('Ad referendum'),
+                  SizedBox(width: 24),
+                  Checkbox(
+                    value: _fixado,
+                    onChanged: (value) {
+                      setState(() {
+                        _fixado = value ?? false;
+                      });
+                    },
+                  ),
+                  const Text('Fixar tópico'),
+                ],
+              ),
               const SizedBox(height: 24),
               Row(
                 children: [
@@ -173,24 +200,44 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
   }
 
   Future<void> _adicionarPauta() async {
+
     final pauta = PautaModel(
       numero: int.parse(_numeroController.text),
       titulo: _tituloController.text,
       descricao: _descricaoController.text,
       processoSei:
-          _processoSeiController.text.isEmpty
-              ? null
-              : _processoSeiController.text,
+        _processoSeiController.text.isEmpty
+          ? null
+          : _processoSeiController.text,
       solicitante:
-          _solicitanteController.text.isEmpty
-              ? null
-              : _solicitanteController.text,
+        _solicitanteController.text.isEmpty
+          ? null
+          : _solicitanteController.text,
       relator: _relatorController.text.isEmpty ? null : _relatorController.text,
       decisao: _decisaoController.text.isEmpty ? null : _decisaoController.text,
       dataInclusao: DateTime.now(),
+      adReferendum: _adReferendum,
+      fixado: _fixado,
     );
 
+
     final pautas = [..._reuniao!.pautas, pauta];
+    pautas.sort((a, b) {
+      // Fixados primeiro
+      if (a.fixado != b.fixado) {
+        return a.fixado ? -1 : 1;
+      }
+      // Entre fixados, ordem de inclusão (numero)
+      if (a.fixado && b.fixado) {
+        return a.numero.compareTo(b.numero);
+      }
+      // Depois ad referendum
+      if (a.adReferendum != b.adReferendum) {
+        return a.adReferendum ? -1 : 1;
+      }
+      // Por fim, ordem de inclusão (numero)
+      return a.numero.compareTo(b.numero);
+    });
     final reuniaoAtualizada = _reuniao!.copyWith(pautas: pautas);
 
     await _atualizarReuniaoUseCase(widget.reuniaoId, reuniaoAtualizada);

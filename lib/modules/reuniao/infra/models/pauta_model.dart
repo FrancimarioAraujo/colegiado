@@ -23,8 +23,16 @@ class PautaModel {
   @HiveField(6)
   final String? decisao;
 
+
   @HiveField(7)
   final DateTime dataInclusao;
+
+
+  @HiveField(8)
+  final bool adReferendum;
+
+  @HiveField(9)
+  final bool fixado;
 
   PautaModel({
     required this.numero,
@@ -35,6 +43,8 @@ class PautaModel {
     this.relator,
     this.decisao,
     required this.dataInclusao,
+    this.adReferendum = false,
+    this.fixado = false,
   });
 
   PautaModel copyWith({
@@ -46,6 +56,8 @@ class PautaModel {
     String? relator,
     String? decisao,
     DateTime? dataInclusao,
+    bool? adReferendum,
+    bool? fixado,
   }) {
     return PautaModel(
       numero: numero ?? this.numero,
@@ -56,6 +68,8 @@ class PautaModel {
       relator: relator ?? this.relator,
       decisao: decisao ?? this.decisao,
       dataInclusao: dataInclusao ?? this.dataInclusao,
+      adReferendum: adReferendum ?? this.adReferendum,
+      fixado: fixado ?? this.fixado,
     );
   }
 }

@@ -174,8 +174,20 @@ class PdfGeneratorService {
                          
                         if (pauta.descricao.isNotEmpty)
                           pw.TextSpan(
-                            text: ' - ${pauta.descricao}',
-                          ),
+  children: [
+    pw.TextSpan(
+      text: ' - ${pauta.descricao}',
+    ),
+
+    if (pauta.adReferendum == true)
+      pw.TextSpan(
+        text: ' (Aprovado Ad Referendum)',
+        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+      ),
+
+    pw.TextSpan(text: ' '),
+  ],
+),
                         
                       ],
                     ),
@@ -269,7 +281,7 @@ class PdfGeneratorService {
                           style: _bold,
                         ),
                         pw.TextSpan(
-                          text: pauta.titulo,
+                          text: pauta.titulo + (pauta.adReferendum == true ? ' (Ad referendum)' : ''),
                           style: _bold,
                         ),
                         if (pauta.decisao != null)
