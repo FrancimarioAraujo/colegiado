@@ -16,21 +16,10 @@ class PautaModel {
 
   @HiveField(4)
   final String? solicitante;
-
-  @HiveField(5)
-  final String? relator;
-
-  @HiveField(6)
-  final String? decisao;
-
-
   @HiveField(7)
   final DateTime dataInclusao;
-
-
   @HiveField(8)
   final bool adReferendum;
-
   @HiveField(9)
   final bool fixado;
 
@@ -40,8 +29,8 @@ class PautaModel {
     required this.descricao,
     this.processoSei,
     this.solicitante,
-    this.relator,
-    this.decisao,
+   
+   
     required this.dataInclusao,
     this.adReferendum = false,
     this.fixado = false,
@@ -53,8 +42,6 @@ class PautaModel {
     String? descricao,
     String? processoSei,
     String? solicitante,
-    String? relator,
-    String? decisao,
     DateTime? dataInclusao,
     bool? adReferendum,
     bool? fixado,
@@ -65,8 +52,7 @@ class PautaModel {
       descricao: descricao ?? this.descricao,
       processoSei: processoSei ?? this.processoSei,
       solicitante: solicitante ?? this.solicitante,
-      relator: relator ?? this.relator,
-      decisao: decisao ?? this.decisao,
+     
       dataInclusao: dataInclusao ?? this.dataInclusao,
       adReferendum: adReferendum ?? this.adReferendum,
       fixado: fixado ?? this.fixado,

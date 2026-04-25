@@ -279,10 +279,7 @@ class PdfGeneratorService {
                               : ''),
                       style: _bold,
                     ),
-                    if (pauta.decisao != null)
-                      pw.TextSpan(
-                        text: ' - ${pauta.decisao}',
-                      ),
+                
                   ],
                 ),
               ),

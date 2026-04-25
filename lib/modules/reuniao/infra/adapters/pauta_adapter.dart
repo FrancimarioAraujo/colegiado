@@ -17,8 +17,6 @@ class PautaAdapter extends TypeAdapter<PautaModel> {
       descricao: fields[2] as String,
       processoSei: fields[3] as String?,
       solicitante: fields[4] as String?,
-      relator: fields[5] as String?,
-      decisao: fields[6] as String?,
       dataInclusao: fields[7] as DateTime,
       adReferendum: fields[8] as bool? ?? false,
       fixado: fields[9] as bool? ?? false,
@@ -38,10 +36,6 @@ class PautaAdapter extends TypeAdapter<PautaModel> {
     writer.write(obj.processoSei);
     writer.writeByte(4);
     writer.write(obj.solicitante);
-    writer.writeByte(5);
-    writer.write(obj.relator);
-    writer.writeByte(6);
-    writer.write(obj.decisao);
     writer.writeByte(7);
     writer.write(obj.dataInclusao);
 

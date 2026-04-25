@@ -14,6 +14,29 @@ class CriarPautaPage extends StatefulWidget {
 }
 
 class _CriarPautaPageState extends State<CriarPautaPage> {
+    final List<String> _modelosPauta = [
+      'Outro',
+      'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO',
+      'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE',
+      'DIPLOMA',
+      'INTERRUPÇÃO DE ESTUDOS',
+      'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL',
+      'COORIENTAÇÃO',
+      'EQUIVALÊNCIA DE TÍTULO DE MESTRE',
+    ];
+    String _modeloSelecionado = 'Outro';
+
+    // Controladores para campos variáveis
+    final _nomeAlunoController = TextEditingController();
+    final _matriculaAlunoController = TextEditingController();
+    final _nomeOrientadorController = TextEditingController();
+    final _justificativaController = TextEditingController();
+    final _notaDisciplinaController = TextEditingController();
+    final _codigoDisciplinaController = TextEditingController();
+    final _nomeRelatorController = TextEditingController();
+    final _nomeProfessorController = TextEditingController();
+    final _semestreController = TextEditingController();
+    final _matriculaEspecialController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late final BuscarReuniaoUseCase _buscarReuniaoUseCase;
   late final AtualizarReuniaoUseCase _atualizarReuniaoUseCase;
@@ -22,9 +45,8 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
   final _tituloController = TextEditingController();
   final _descricaoController = TextEditingController();
   final _processoSeiController = TextEditingController();
-  final _solicitanteController = TextEditingController();
-  final _relatorController = TextEditingController();
-  final _decisaoController = TextEditingController();
+ 
+ 
 
   bool _adReferendum = false;
   bool _fixado = false;
@@ -42,6 +64,58 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
     if (_reuniao != null) {
       _numeroController.text = '${_reuniao!.pautas.length + 1}';
     }
+    // Inicializa campos se modelo não for "Outro"
+    _aplicarModeloPauta(_modeloSelecionado);
+  }
+
+  void _aplicarModeloPauta(String modelo) {
+    // Limpa todos os campos variáveis
+    _tituloController.clear();
+    _descricaoController.clear();
+    _processoSeiController.clear();
+    _nomeAlunoController.clear();
+    _matriculaAlunoController.clear();
+    _nomeOrientadorController.clear();
+    _justificativaController.clear();
+    _notaDisciplinaController.clear();
+    _codigoDisciplinaController.clear();
+    _nomeRelatorController.clear();
+    _nomeProfessorController.clear();
+    _semestreController.clear();
+    _matriculaEspecialController.clear();
+    _adReferendum = false;
+
+    switch (modelo) {
+      case 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO':
+        _tituloController.text = 'Prorrogação de Prazo - Proposta/Qualificação';
+        _adReferendum = true;
+        break;
+      case 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE':
+        _tituloController.text = 'Prorrogação de Prazo - Dissertação/Tese';
+        _adReferendum = true;
+        break;
+      case 'DIPLOMA':
+        _tituloController.text = 'PROCESSO SEI';
+        _adReferendum = true;
+        break;
+      case 'INTERRUPÇÃO DE ESTUDOS':
+        _tituloController.text = 'Interrupção de Estudos';
+        _adReferendum = true;
+        break;
+      case 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL':
+        _tituloController.text = 'Aproveitamento de Disciplinas de Aluno Especial';
+        _adReferendum = true;
+        break;
+      case 'COORIENTAÇÃO':
+        _tituloController.text = 'Coorientação';
+        break;
+      case 'EQUIVALÊNCIA DE TÍTULO DE MESTRE':
+        _tituloController.text = 'Equivalência de Título de Mestre';
+        break;
+      default:
+        break;
+    }
+    setState(() {});
   }
 
   @override
@@ -50,9 +124,8 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
     _tituloController.dispose();
     _descricaoController.dispose();
     _processoSeiController.dispose();
-    _solicitanteController.dispose();
-    _relatorController.dispose();
-    _decisaoController.dispose();
+  
+  
     super.dispose();
   }
 
@@ -74,6 +147,26 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              DropdownButtonFormField<String>(
+                value: _modeloSelecionado,
+                items: _modelosPauta
+                    .map((modelo) => DropdownMenuItem(
+                          value: modelo,
+                          child: Text(modelo, maxLines: 2, overflow: TextOverflow.ellipsis),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    _modeloSelecionado = value;
+                    _aplicarModeloPauta(value);
+                  }
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Modelo de Pauta',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _numeroController,
                 decoration: const InputDecoration(
@@ -88,6 +181,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                 },
               ),
               const SizedBox(height: 12),
+              if(_modeloSelecionado != "DIPLOMA")
               TextFormField(
                 controller: _tituloController,
                 decoration: const InputDecoration(
@@ -102,47 +196,181 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                 },
               ),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _descricaoController,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  labelText: 'Descrição',
-                  border: OutlineInputBorder(),
+              // Campos dinâmicos conforme modelo
+              if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
+                  _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
+                  _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
+                  _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL' ||
+                  _modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE' ||
+                  _modeloSelecionado == 'DIPLOMA')
+                TextFormField(
+                  controller: _processoSeiController,
+                  decoration: const InputDecoration(
+                    labelText: 'Número do Processo SEI',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _processoSeiController,
-                decoration: const InputDecoration(
-                  labelText: 'Processo SEI (opcional)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _solicitanteController,
-                decoration: const InputDecoration(
-                  labelText: 'Solicitante (opcional)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _relatorController,
-                decoration: const InputDecoration(
-                  labelText: 'Relator (opcional)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _decisaoController,
-                maxLines: 2,
-                decoration: const InputDecoration(
-                  labelText: 'Decisão (preencherá na ata)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+              if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
+                  _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
+                  _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
+                  _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL' ||
+                  _modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _nomeAlunoController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do Aluno',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _matriculaAlunoController,
+                    decoration: const InputDecoration(
+                      labelText: 'Número da Matrícula',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
+                  _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
+                  _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
+                  _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _nomeOrientadorController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do Orientador',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
+                  _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
+                  _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _justificativaController,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      labelText: 'Justificativa do Aluno',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              if (_modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _semestreController,
+                    decoration: const InputDecoration(
+                      labelText: 'Semestre das Disciplinas',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _codigoDisciplinaController,
+                    decoration: const InputDecoration(
+                      labelText: 'Códigos das Disciplinas',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _notaDisciplinaController,
+                    decoration: const InputDecoration(
+                      labelText: 'Notas das Disciplinas',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _matriculaEspecialController,
+                    decoration: const InputDecoration(
+                      labelText: 'Matrícula do Aluno Especial',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              if (_modeloSelecionado == 'COORIENTAÇÃO')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _nomeProfessorController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do Professor',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _justificativaController,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      labelText: 'Texto da Solicitação',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              if (_modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _nomeRelatorController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do Relator',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _justificativaController,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      labelText: 'Texto do Parecer do Relator',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              if (_modeloSelecionado == 'DIPLOMA')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _nomeAlunoController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do Aluno',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  
+                ],
+              if (_modeloSelecionado == 'Outro')
+                ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _descricaoController,
+                    maxLines: 4,
+                    decoration: const InputDecoration(
+                      labelText: 'Descrição',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _processoSeiController,
+                    decoration: const InputDecoration(
+                      labelText: 'Processo SEI (opcional)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                 
+               
+                
+                ],
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -199,6 +427,22 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
     );
   }
 
+//   Future<void> adicionarPautaDiploma(String nomeAluno, String processoSei){
+// final pauta = PautaModel(
+//       numero: int.parse(_numeroController.text),
+//       titulo: "PROCESSO SEI",
+//       descricao: """Homologação do resultado da Comissão Examinadora que aprovou a Dissertação de JOYCE VANESSA MORAIS RODRIGUES, como
+// também o processo de solicitação de Diploma""",
+//       processoSei:
+//         _processoSeiController.text.isEmpty
+//           ? null
+//           : _processoSeiController.text,
+//       dataInclusao: DateTime.now(),
+//       adReferendum: _adReferendum,
+//       fixado: _fixado,
+//     );
+//   }
+
   Future<void> _adicionarPauta() async {
 
     final pauta = PautaModel(
@@ -209,12 +453,6 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
         _processoSeiController.text.isEmpty
           ? null
           : _processoSeiController.text,
-      solicitante:
-        _solicitanteController.text.isEmpty
-          ? null
-          : _solicitanteController.text,
-      relator: _relatorController.text.isEmpty ? null : _relatorController.text,
-      decisao: _decisaoController.text.isEmpty ? null : _decisaoController.text,
       dataInclusao: DateTime.now(),
       adReferendum: _adReferendum,
       fixado: _fixado,

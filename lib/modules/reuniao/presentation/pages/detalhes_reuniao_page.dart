@@ -231,8 +231,6 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
     final solicitanteController = TextEditingController(
       text: pauta.solicitante ?? '',
     );
-    final relatorController = TextEditingController(text: pauta.relator ?? '');
-    final decisaoController = TextEditingController(text: pauta.decisao ?? '');
     final formKey = GlobalKey<FormState>();
 
     await showDialog<void>(
@@ -283,16 +281,6 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                     controller: solicitanteController,
                     decoration: const InputDecoration(labelText: 'Solicitante'),
                   ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: relatorController,
-                    decoration: const InputDecoration(labelText: 'Relator'),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: decisaoController,
-                    decoration: const InputDecoration(labelText: 'Decisão'),
-                  ),
                 ],
               ),
             ),
@@ -317,14 +305,7 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                         solicitanteController.text.isEmpty
                             ? null
                             : solicitanteController.text,
-                    relator:
-                        relatorController.text.isEmpty
-                            ? null
-                            : relatorController.text,
-                    decisao:
-                        decisaoController.text.isEmpty
-                            ? null
-                            : decisaoController.text,
+                  
                   );
 
                   final pautas = List<PautaModel>.from(_reuniao!.pautas);
