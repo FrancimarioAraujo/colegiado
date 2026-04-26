@@ -339,13 +339,28 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                 ],
               if (_modeloSelecionado == 'DIPLOMA')
                 ...[
-                   const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _tipoDefesaController,
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    value: _tipoDefesaController.text.isNotEmpty ? _tipoDefesaController.text : 'Dissertação',
+                    items: const [
+                      DropdownMenuItem(value: 'Dissertação', child: Text('DISSERTAÇÃO')),
+                      DropdownMenuItem(value: 'Tese', child: Text('TESE')),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _tipoDefesaController.text = value ?? 'Dissertação';
+                      });
+                    },
                     decoration: const InputDecoration(
                       labelText: 'Tipo de Defesa',
                       border: OutlineInputBorder(),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Selecione o tipo de defesa';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
@@ -355,7 +370,6 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  
                 ],
               if (_modeloSelecionado == 'Outro')
                 ...[
@@ -376,7 +390,6 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                 
                
                 
                 ],
