@@ -15,7 +15,6 @@ class CriarPautaPage extends StatefulWidget {
 
 class _CriarPautaPageState extends State<CriarPautaPage> {
     final List<String> _modelosPauta = [
-      'Outro',
       'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO',
       'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE',
       'DIPLOMA',
@@ -24,7 +23,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
       'COORIENTAÇÃO',
       'EQUIVALÊNCIA DE TÍTULO DE MESTRE',
     ];
-    String _modeloSelecionado = 'Outro';
+    String _modeloSelecionado = 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO';
 
     // Controladores para campos variáveis
     final _nomeAlunoController = TextEditingController();
@@ -64,7 +63,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
     if (_reuniao != null) {
       _numeroController.text = '${_reuniao!.pautas.length + 1}';
     }
-    // Inicializa campos se modelo não for "Outro"
+   
     _aplicarModeloPauta(_modeloSelecionado);
   }
 
@@ -201,7 +200,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                   _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
                   _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL' ||
                   _modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE' ||
-                  _modeloSelecionado == 'DIPLOMA' || _modeloSelecionado == 'Outro')
+                  _modeloSelecionado == 'DIPLOMA')
                 Container(
                   padding: const EdgeInsets.only(top: 12),
                   child: TextFormField(
@@ -216,7 +215,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                   _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
                   _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
                   _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL' ||
-                  _modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE' || _modeloSelecionado == 'Outro')
+                  _modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE')
                 ...[
                   
                   Container(
@@ -244,7 +243,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
               if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
                   _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
                   _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
-                  _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL' || _modeloSelecionado == 'Outro')
+                  _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL')
                 ...[
                  
                   Container(
@@ -260,7 +259,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                 ],
               if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
                   _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
-                  _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' || _modeloSelecionado == 'Outro')
+                  _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS')
                 ...[
                  
                   Container(
@@ -275,7 +274,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     ),
                   ),
                 ],
-              if (_modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL' || _modeloSelecionado == 'Outro')
+              if (_modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL')
                 ...[
                  
                   Container(
@@ -322,7 +321,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     ),
                   ),
                 ],
-              if (_modeloSelecionado == 'COORIENTAÇÃO' || _modeloSelecionado == 'Outro')
+              if (_modeloSelecionado == 'COORIENTAÇÃO')
                 ...[
                 
                   Container(
@@ -348,7 +347,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     ),
                   ),
                 ],
-              if (_modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE' || _modeloSelecionado == 'Outro')
+              if (_modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE')
                 ...[
                  
                   Container(
@@ -362,7 +361,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     ),
                   ),
                 ],
-              if (_modeloSelecionado == 'DIPLOMA' || _modeloSelecionado == 'Outro')
+              if (_modeloSelecionado == 'DIPLOMA')
                 ...[
                   
                   Container(
@@ -402,21 +401,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     ),
                   ),
                 ],
-              if (_modeloSelecionado == 'Outro')
-                ...[
-                 
-                  Container(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: TextFormField(
-                      controller: _descricaoController,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                        labelText: 'Descrição',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
+          
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -579,7 +564,7 @@ final pauta = PautaModel(
           ? null
           : _tipoDefesaController.text,
       adReferendum: _adReferendum,
-      fixado: _fixado, tipoPauta: TipoPauta.outra
+      fixado: _fixado, tipoPauta: TipoPauta.prorrogacaoPropostaQualificacao
       ,
     );
     if(pautaPersonalizada != null){

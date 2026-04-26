@@ -8,53 +8,50 @@ class TipoPautaAdapter extends TypeAdapter<TipoPauta> {
   @override
   TipoPauta read(BinaryReader reader) {
     switch (reader.readByte()) {
+      
       case 0:
-        return TipoPauta.outra;
-      case 1:
         return TipoPauta.prorrogacaoPropostaQualificacao;
-      case 2:
+      case 1:
         return TipoPauta.prorrogacaoDissertacaoTese;
-      case 3:
+      case 2:
         return TipoPauta.diploma;
-      case 4:
+      case 3:
         return TipoPauta.interrupcao;
-      case 5:
+      case 4:
         return TipoPauta.aproveitamento;
-      case 6:
+      case 5:
         return TipoPauta.coorientacao;
-      case 7:
+      case 6:
         return TipoPauta.equivalencia;
       default:
-        return TipoPauta.outra;
+        return TipoPauta.prorrogacaoPropostaQualificacao;
     }
   }
 
   @override
   void write(BinaryWriter writer, TipoPauta obj) {
     switch (obj) {
-      case TipoPauta.outra:
+   
+      case TipoPauta.prorrogacaoPropostaQualificacao:
         writer.writeByte(0);
         break;
-      case TipoPauta.prorrogacaoPropostaQualificacao:
+      case TipoPauta.prorrogacaoDissertacaoTese:
         writer.writeByte(1);
         break;
-      case TipoPauta.prorrogacaoDissertacaoTese:
+      case TipoPauta.diploma:
         writer.writeByte(2);
         break;
-      case TipoPauta.diploma:
+      case TipoPauta.interrupcao:
         writer.writeByte(3);
         break;
-      case TipoPauta.interrupcao:
+      case TipoPauta.aproveitamento:
         writer.writeByte(4);
         break;
-      case TipoPauta.aproveitamento:
+      case TipoPauta.coorientacao:
         writer.writeByte(5);
         break;
-      case TipoPauta.coorientacao:
-        writer.writeByte(6);
-        break;
       case TipoPauta.equivalencia:
-        writer.writeByte(7);
+        writer.writeByte(6);
         break;
     }
   }

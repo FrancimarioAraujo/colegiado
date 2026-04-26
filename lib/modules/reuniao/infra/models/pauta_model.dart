@@ -76,7 +76,6 @@ class PautaModel {
 }
 
 enum TipoPauta {
-  outra,
   prorrogacaoPropostaQualificacao,
   prorrogacaoDissertacaoTese,
   diploma,
