@@ -566,8 +566,8 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildInfoCard(),
-            const SizedBox(height: 16),
-            _buildParticipantesCard(),
+            // const SizedBox(height: 16),
+            // _buildParticipantesCard(),
             const SizedBox(height: 16),
             _buildPautasCard(),
             const SizedBox(height: 16),

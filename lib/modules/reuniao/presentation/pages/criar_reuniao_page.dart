@@ -199,134 +199,134 @@ class _CriarReuniaoPageState extends State<CriarReuniaoPage> {
                 ),
               ),
            
-              const SizedBox(height: 24),
+              // const SizedBox(height: 24),
 
-              // Seção de participantes
-              _buildSectionTitle('Participantes'),
-              const SizedBox(height: 8),
+              // // Seção de participantes
+              // _buildSectionTitle('Participantes'),
+              // const SizedBox(height: 8),
 
-              // Seção de seleção de pessoas pré-cadastradas
-              if (_pessoasDisponiveis.isNotEmpty) ...[
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Text(
-                          'Selecionar Pessoas Cadastradas',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: _pessoasDisponiveis.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final pessoa = entry.value;
-                            final isSelected = _pessoasSelecionadas.contains(index);
-                            return FilterChip(
-                              label: Text('${pessoa.titulacao} ${pessoa.nome}'),
-                              selected: isSelected,
-                              onSelected: (selected) {
-                                setState(() {
-                                  if (selected) {
-                                    _pessoasSelecionadas.add(index);
-                                  } else {
-                                    _pessoasSelecionadas.remove(index);
-                                  }
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 12),
-                        ElevatedButton.icon(
-                          onPressed: _pessoasSelecionadas.isNotEmpty ? _adicionarParticipantesSelecionados : null,
-                          icon: const Icon(Icons.add),
-                          label: const Text('Adicionar Selecionados'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
+              // // Seção de seleção de pessoas pré-cadastradas
+              // if (_pessoasDisponiveis.isNotEmpty) ...[
+              //   Card(
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(12),
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.stretch,
+              //         children: [
+              //           const Text(
+              //             'Selecionar Pessoas Cadastradas',
+              //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              //           ),
+              //           const SizedBox(height: 8),
+              //           Wrap(
+              //             spacing: 8,
+              //             runSpacing: 8,
+              //             children: _pessoasDisponiveis.asMap().entries.map((entry) {
+              //               final index = entry.key;
+              //               final pessoa = entry.value;
+              //               final isSelected = _pessoasSelecionadas.contains(index);
+              //               return FilterChip(
+              //                 label: Text('${pessoa.titulacao} ${pessoa.nome}'),
+              //                 selected: isSelected,
+              //                 onSelected: (selected) {
+              //                   setState(() {
+              //                     if (selected) {
+              //                       _pessoasSelecionadas.add(index);
+              //                     } else {
+              //                       _pessoasSelecionadas.remove(index);
+              //                     }
+              //                   });
+              //                 },
+              //               );
+              //             }).toList(),
+              //           ),
+              //           const SizedBox(height: 12),
+              //           ElevatedButton.icon(
+              //             onPressed: _pessoasSelecionadas.isNotEmpty ? _adicionarParticipantesSelecionados : null,
+              //             icon: const Icon(Icons.add),
+              //             label: const Text('Adicionar Selecionados'),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              //   const SizedBox(height: 16),
+              // ],
 
               // Seção de adicionar participante manualmente
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text(
-                        'Adicionar Participante Manualmente',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 12),
-                      TextFormField(
-                        controller: _nomeParticipanteController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nome do Participante',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _titulacaoParticipanteController,
-                              decoration: const InputDecoration(
-                                labelText: 'Titulação',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: DropdownButtonFormField<int>(
-                              value: _tipoParticipanteSelecionado,
-                              items: [
-                                const DropdownMenuItem(
-                                  value: 0,
-                                  child: Text('Presidente'),
-                                ),
-                                const DropdownMenuItem(
-                                  value: 1,
-                                  child: Text('Secretário'),
-                                ),
-                                const DropdownMenuItem(
-                                  value: 2,
-                                  child: Text('Membro'),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                if (value != null) {
-                                  setState(() {
-                                    _tipoParticipanteSelecionado = value;
-                                  });
-                                }
-                              },
-                              decoration: const InputDecoration(
-                                labelText: 'Tipo',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      ElevatedButton.icon(
-                        onPressed: _adicionarParticipante,
-                        icon: const Icon(Icons.add),
-                        label: const Text('Adicionar Participante'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Card(
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(12),
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.stretch,
+              //       children: [
+              //         const Text(
+              //           'Adicionar Participante Manualmente',
+              //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              //         ),
+              //         const SizedBox(height: 12),
+              //         TextFormField(
+              //           controller: _nomeParticipanteController,
+              //           decoration: const InputDecoration(
+              //             labelText: 'Nome do Participante',
+              //             border: OutlineInputBorder(),
+              //           ),
+              //         ),
+              //         const SizedBox(height: 12),
+              //         Row(
+              //           children: [
+              //             Expanded(
+              //               child: TextFormField(
+              //                 controller: _titulacaoParticipanteController,
+              //                 decoration: const InputDecoration(
+              //                   labelText: 'Titulação',
+              //                   border: OutlineInputBorder(),
+              //                 ),
+              //               ),
+              //             ),
+              //             const SizedBox(width: 12),
+              //             Expanded(
+              //               child: DropdownButtonFormField<int>(
+              //                 value: _tipoParticipanteSelecionado,
+              //                 items: [
+              //                   const DropdownMenuItem(
+              //                     value: 0,
+              //                     child: Text('Presidente'),
+              //                   ),
+              //                   const DropdownMenuItem(
+              //                     value: 1,
+              //                     child: Text('Secretário'),
+              //                   ),
+              //                   const DropdownMenuItem(
+              //                     value: 2,
+              //                     child: Text('Membro'),
+              //                   ),
+              //                 ],
+              //                 onChanged: (value) {
+              //                   if (value != null) {
+              //                     setState(() {
+              //                       _tipoParticipanteSelecionado = value;
+              //                     });
+              //                   }
+              //                 },
+              //                 decoration: const InputDecoration(
+              //                   labelText: 'Tipo',
+              //                   border: OutlineInputBorder(),
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //         const SizedBox(height: 12),
+              //         ElevatedButton.icon(
+              //           onPressed: _adicionarParticipante,
+              //           icon: const Icon(Icons.add),
+              //           label: const Text('Adicionar Participante'),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 12),
               if (_participantes.isNotEmpty) ...[
                 ..._participantes.asMap().entries.map((entry) {
