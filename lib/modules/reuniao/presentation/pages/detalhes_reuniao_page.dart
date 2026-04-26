@@ -228,9 +228,6 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
     final processoController = TextEditingController(
       text: pauta.processoSei ?? '',
     );
-    final solicitanteController = TextEditingController(
-      text: pauta.solicitante ?? '',
-    );
     final formKey = GlobalKey<FormState>();
 
     await showDialog<void>(
@@ -276,11 +273,7 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                       labelText: 'Processo SEI',
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: solicitanteController,
-                    decoration: const InputDecoration(labelText: 'Solicitante'),
-                  ),
+              
                 ],
               ),
             ),
@@ -301,11 +294,6 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                         processoController.text.isEmpty
                             ? null
                             : processoController.text,
-                    solicitante:
-                        solicitanteController.text.isEmpty
-                            ? null
-                            : solicitanteController.text,
-                  
                   );
 
                   final pautas = List<PautaModel>.from(_reuniao!.pautas);

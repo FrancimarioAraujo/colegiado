@@ -106,7 +106,7 @@ class PdfGeneratorService {
               children: [
                 pw.TextSpan(
                   text:
-                      'Convocamos Vossa Senhoria para a ${reuniao.numero} Reunião ${reuniao.tipo} do Colegiado do Programa de Pós-Graduação em Engenharia Elétrica, a realizar-se no dia ',
+                      'Convocamos Vossa Senhoria para a ${reuniao.numero}ª Reunião ${reuniao.tipo} do Colegiado do Programa de Pós-Graduação em Engenharia Elétrica, a realizar-se no dia ',
                 ),
                 pw.TextSpan(
                   text: DateFormatter.formatDateLong(reuniao.data),

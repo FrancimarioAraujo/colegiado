@@ -28,6 +28,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
 
     // Controladores para campos variáveis
     final _nomeAlunoController = TextEditingController();
+    final _tipoDefesaController = TextEditingController();
     final _matriculaAlunoController = TextEditingController();
     final _nomeOrientadorController = TextEditingController();
     final _justificativaController = TextEditingController();
@@ -338,6 +339,14 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                 ],
               if (_modeloSelecionado == 'DIPLOMA')
                 ...[
+                   const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _tipoDefesaController,
+                    decoration: const InputDecoration(
+                      labelText: 'Tipo de Defesa',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _nomeAlunoController,
@@ -402,7 +411,13 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          _adicionarPauta();
+                          if(_modeloSelecionado == "DIPLOMA"){
+_adicionarPautaDiploma(_nomeAlunoController.text, _processoSeiController.text,_tipoDefesaController.text);
+                          }
+                          else{
+                            _adicionarPauta(null);
+                          }
+                          
                         }
                       },
                       child: const Text('Adicionar'),
@@ -427,25 +442,25 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
     );
   }
 
-//   Future<void> adicionarPautaDiploma(String nomeAluno, String processoSei){
-// final pauta = PautaModel(
-//       numero: int.parse(_numeroController.text),
-//       titulo: "PROCESSO SEI",
-//       descricao: """Homologação do resultado da Comissão Examinadora que aprovou a Dissertação de JOYCE VANESSA MORAIS RODRIGUES, como
-// também o processo de solicitação de Diploma""",
-//       processoSei:
-//         _processoSeiController.text.isEmpty
-//           ? null
-//           : _processoSeiController.text,
-//       dataInclusao: DateTime.now(),
-//       adReferendum: _adReferendum,
-//       fixado: _fixado,
-//     );
-//   }
+  Future<void> _adicionarPautaDiploma(String nomeAluno, String processoSei, String tipoDefesa) async {
+final pauta = PautaModel(
+      numero: int.parse(_numeroController.text),
+      titulo: "PROCESSO SEI",
+      descricao: """Homologação do resultado da Comissão Examinadora que aprovou a $tipoDefesa de $nomeAluno, como
+também o processo de solicitação de Diploma.""",
+      processoSei:
+        _processoSeiController.text.isEmpty
+          ? null
+          : _processoSeiController.text,
+      adReferendum: _adReferendum,
+      fixado: _fixado,
+    );
+    await _adicionarPauta(pauta);
+  }
 
-  Future<void> _adicionarPauta() async {
+  Future<void> _adicionarPauta(PautaModel? pautaPersonalizada) async {
 
-    final pauta = PautaModel(
+    PautaModel pauta = PautaModel(
       numero: int.parse(_numeroController.text),
       titulo: _tituloController.text,
       descricao: _descricaoController.text,
@@ -453,10 +468,15 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
         _processoSeiController.text.isEmpty
           ? null
           : _processoSeiController.text,
-      dataInclusao: DateTime.now(),
+        tipoDefesa: _tipoDefesaController.text.isEmpty
+          ? null
+          : _tipoDefesaController.text,
       adReferendum: _adReferendum,
       fixado: _fixado,
     );
+    if(pautaPersonalizada != null){
+  pauta = pautaPersonalizada;
+}
 
 
     final pautas = [..._reuniao!.pautas, pauta];
