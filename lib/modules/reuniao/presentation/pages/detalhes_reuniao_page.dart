@@ -293,7 +293,7 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                     processoSei:
                         processoController.text.isEmpty
                             ? null
-                            : processoController.text,
+                            : processoController.text, tipoPauta: pauta.tipoPauta,
                   );
 
                   final pautas = List<PautaModel>.from(_reuniao!.pautas);
@@ -795,6 +795,50 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                          if (pauta.matricula != null &&
+                              pauta.matricula!.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Matrícula: ${pauta.matricula}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                          if (pauta.orientador != null &&
+                              pauta.orientador!.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Orientador: ${pauta.orientador}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                          if (pauta.nomeAluno != null &&
+                              pauta.nomeAluno!.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Aluno: ${pauta.nomeAluno}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                          if (pauta.adReferendum
+                             ) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Aprovado Ad Referendum',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
                               ),
                             ),
                           ],

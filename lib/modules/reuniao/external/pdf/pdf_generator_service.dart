@@ -1,8 +1,8 @@
+import 'package:colegiado/modules/reuniao/infra/models/pauta_model.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../infra/models/reuniao_model.dart';
-import '../../infra/models/ata_model.dart';
 import '../../../../core/locale/date_formatter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -129,7 +129,42 @@ class PdfGeneratorService {
 
           // 🔹 LISTA DE PAUTAS
           ...reuniao.pautas.map((pauta) {
-            return pw.Padding(
+            if(pauta.tipoPauta == TipoPauta.prorrogacaoPropostaQualificacao){
+              return gerarPautaProrrogacaoDefesa(pauta);
+            }
+            if(pauta.tipoPauta == TipoPauta.prorrogacaoDissertacaoTese){
+              return gerarPautaProrrogacaoDissertacaoTese(pauta);
+            }
+            return gerarOutraPauta(pauta);
+          }).toList(),
+
+          pw.SizedBox(height: 30),
+
+          pw.Center(
+            child: pw.Text(
+              'Campina Grande, ${DateFormatter.formatDateLong(DateTime.now())}',
+              style: _base,
+            ),
+          ),
+
+          pw.SizedBox(height: 40),
+
+          pw.Center(child: pw.Text('__________________________________')),
+          pw.Center(
+            child: pw.Text(
+              'Coordenador do PPgEE',
+              style: pw.TextStyle(fontSize: 10),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return doc;
+  } 
+
+  pw.Padding gerarOutraPauta(PautaModel pauta){
+    return pw.Padding(
               padding: const pw.EdgeInsets.only(bottom: 10),
               child: pw.RichText(
                 text: pw.TextSpan(
@@ -178,92 +213,10 @@ class PdfGeneratorService {
                 textAlign: pw.TextAlign.justify,
               ),
             );
-          }).toList(),
-
-          pw.SizedBox(height: 30),
-
-          pw.Center(
-            child: pw.Text(
-              'Campina Grande, ${DateFormatter.formatDateLong(DateTime.now())}',
-              style: _base,
-            ),
-          ),
-
-          pw.SizedBox(height: 40),
-
-          pw.Center(child: pw.Text('__________________________________')),
-          pw.Center(
-            child: pw.Text(
-              'Coordenador do PPgEE',
-              style: pw.TextStyle(fontSize: 10),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    return doc;
   }
-
-  // ===============================
-  // 📌 ATA
-  // ===============================
-  Future<pw.Document> gerarAta(AtaModel ata) async {
-    final imageBytes = await rootBundle.load('assets/images/brasao.png');
-    final image = pw.Image(
-      pw.MemoryImage(imageBytes.buffer.asUint8List()),
-      width: 50,
-      height: 50,
-    );
-
-    final doc = pw.Document();
-
-    doc.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.fromLTRB(60, 80, 60, 60),
-
-        // ✅ Cabeçalho só na primeira página
-        header: (context) {
-          if (context.pageNumber == 1) {
-            return pw.Center(child: _buildHeader(image));
-          }
-          return pw.SizedBox();
-        },
-
-        footer: (context) => pw.Align(
-          alignment: pw.Alignment.centerRight,
-          child: pw.Text(
-            'Página ${context.pageNumber} de ${context.pagesCount}',
-            style: pw.TextStyle(fontSize: 9),
-          ),
-        ),
-
-        build: (context) => [
-          pw.SizedBox(height: 20),
-
-          pw.Center(
-            child: pw.Text(
-              'ATA DA ${ata.reuniaoNumero}ª REUNIÃO ORDINÁRIA DO COLEGIADO',
-              style: _bold,
-              textAlign: pw.TextAlign.center,
-            ),
-          ),
-
-          pw.SizedBox(height: 20),
-
-          pw.Paragraph(
-            text:
-                'Aos ${DateFormatter.formatDateLong(ata.dataReuniao)}, às ${ata.hora}, em ${ata.local}, realizou-se a reunião do colegiado...',
-            style: _base,
-            textAlign: pw.TextAlign.justify,
-          ),
-
-          pw.SizedBox(height: 15),
-
-          ...ata.pautas.map((pauta) {
-            return pw.Padding(
-              padding: const pw.EdgeInsets.only(bottom: 12),
+   pw.Padding gerarPautaProrrogacaoDissertacaoTese(PautaModel pauta){
+   return  pw.Padding(
+              padding: const pw.EdgeInsets.only(bottom: 10),
               child: pw.RichText(
                 text: pw.TextSpan(
                   style: _base,
@@ -273,63 +226,133 @@ class PdfGeneratorService {
                       style: _bold,
                     ),
                     pw.TextSpan(
-                      text: pauta.titulo +
-                          (pauta.adReferendum == true
-                              ? ' (Ad referendum)'
-                              : ''),
+                      text: pauta.titulo,
                       style: _bold,
                     ),
-                
+                    if (pauta.processoSei != null &&
+                        pauta.processoSei!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.processoSei!,
+                            style: pw.TextStyle(
+                              color: PdfColor(0, 0, 0.5),
+                              decoration: pw.TextDecoration.underline,
+                              fontWeight: pw.FontWeight.bold,
+                              fontStyle: pw.FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+      if(pauta.nomeAluno != null && pauta.nomeAluno!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.nomeAluno!.toUpperCase(),
+                        
+                          ),
+                        ],
+                      ),
+
+                       
+                    if (pauta.matricula != null && pauta.matricula!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.matricula!,
+                        
+                          ),
+                        ],
+                      ),
+
+                      if (pauta.orientador != null && pauta.orientador!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.orientador!,
+                          
+                          ),
+                        ],
+                      ),
+
+                    if (pauta.descricao.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ${pauta.descricao}'),
+                          if (pauta.adReferendum == true)
+                            pw.TextSpan(
+                              text: ' (Aprovado Ad Referendum)',
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold),
+                            ),
+                        ],
+                      ),
                   ],
                 ),
+                textAlign: pw.TextAlign.justify,
               ),
             );
-          }).toList(),
-
-          pw.SizedBox(height: 30),
-
-          pw.Center(
-            child: pw.Text(
-              'Campina Grande, ${DateFormatter.formatDateLong(ata.dataReuniao)}',
-              style: _base,
-            ),
-          ),
-
-          pw.SizedBox(height: 40),
-
-          pw.Row(
-            mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
-            children: [
-              _assinatura(ata.secretario, 'Secretário'),
-              _assinatura(ata.coordenador, 'Coordenador'),
-            ],
-          ),
-        ],
-      ),
-    );
-
-    return doc;
   }
+  
 
-  // ===============================
-  // ✍️ ASSINATURA
-  // ===============================
-  pw.Widget _assinatura(String? nome, String cargo) {
-    return pw.Column(
-      children: [
-        pw.SizedBox(height: 40),
-        pw.Text('_______________________________'),
-        if (nome != null && nome.isNotEmpty)
-          pw.Text(
-            nome,
-            style: pw.TextStyle(fontSize: 9),
-            textAlign: pw.TextAlign.center,
-          ),
-        pw.Text(
-          cargo,
-          style: pw.TextStyle(fontSize: 9),
-        ),
-      ],
-    );
+  pw.Padding gerarPautaProrrogacaoDefesa(PautaModel pauta){
+   return  pw.Padding(
+              padding: const pw.EdgeInsets.only(bottom: 10),
+              child: pw.RichText(
+                text: pw.TextSpan(
+                  style: _base,
+                  children: [
+                    pw.TextSpan(
+                      text: '${pauta.numero}. ',
+                      style: _bold,
+                    ),
+                    pw.TextSpan(
+                      text: pauta.titulo,
+                      style: _bold,
+                    ),
+
+                    if (pauta.matricula != null && pauta.matricula!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.matricula!,
+                        
+                          ),
+                        ],
+                      ),
+
+                      if (pauta.orientador != null && pauta.orientador!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.orientador!,
+                          
+                          ),
+                        ],
+                      ),
+
+                    if (pauta.descricao.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ${pauta.descricao}'),
+                          if (pauta.adReferendum == true)
+                            pw.TextSpan(
+                              text: ' (Aprovado Ad Referendum)',
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold),
+                            ),
+                        ],
+                      ),
+                  ],
+                ),
+                textAlign: pw.TextAlign.justify,
+              ),
+            );
   }
 }

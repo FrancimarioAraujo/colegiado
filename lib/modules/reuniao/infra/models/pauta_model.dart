@@ -1,3 +1,5 @@
+
+
 import 'package:hive/hive.dart';
  
 @HiveType(typeId: 1)
@@ -16,6 +18,14 @@ class PautaModel {
   final bool fixado;
   @HiveField(6)
   final String? tipoDefesa;
+  @HiveField(7)
+  final String? matricula;
+  @HiveField(8)
+  final String? orientador;
+  @HiveField(9)
+  final TipoPauta tipoPauta;
+  @HiveField(10)
+  final String? nomeAluno;
 
   PautaModel({
     required this.numero,
@@ -25,6 +35,10 @@ class PautaModel {
     this.adReferendum = false,
     this.fixado = false,
     this.tipoDefesa,
+    this.matricula,
+    this.orientador,
+    required this.tipoPauta,
+    this.nomeAluno,
   });
 
   PautaModel copyWith({
@@ -35,6 +49,10 @@ class PautaModel {
     bool? adReferendum,
     bool? fixado,
     String? tipoDefesa,
+    String? matricula,
+    String? orientador,
+    String? nomeAluno,
+    required TipoPauta tipoPauta,
   }) {
     return PautaModel(
       numero: numero ?? this.numero,
@@ -44,6 +62,21 @@ class PautaModel {
       adReferendum: adReferendum ?? this.adReferendum,
       fixado: fixado ?? this.fixado,
       tipoDefesa: tipoDefesa ?? this.tipoDefesa,
+      matricula: matricula ?? this.matricula,
+      orientador: orientador ?? this.orientador,
+      tipoPauta: tipoPauta,
+      nomeAluno: nomeAluno ?? this.nomeAluno,
     );
   }
+}
+
+enum TipoPauta {
+  outra,
+  prorrogacaoPropostaQualificacao,
+  prorrogacaoDissertacaoTese,
+  diploma,
+  interrupcao,
+  aproveitamento,
+  coorientacao,
+  equivalencia
 }

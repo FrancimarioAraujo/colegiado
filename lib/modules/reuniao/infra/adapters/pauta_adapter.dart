@@ -19,12 +19,16 @@ class PautaAdapter extends TypeAdapter<PautaModel> {
       adReferendum: fields[4] as bool? ?? false,
       fixado: fields[5] as bool? ?? false,
       tipoDefesa: fields[6] as String?,
+      matricula: fields[7] as String?,
+      orientador: fields[8] as String?, 
+      tipoPauta: fields[9] as TipoPauta,
+      nomeAluno: fields[10] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PautaModel obj) {
-    writer.writeByte(7);
+    writer.writeByte(11);
     writer.writeByte(0);
     writer.write(obj.numero);
     writer.writeByte(1);
@@ -39,6 +43,14 @@ class PautaAdapter extends TypeAdapter<PautaModel> {
     writer.write(obj.fixado);
     writer.writeByte(6);
     writer.write(obj.tipoDefesa);
+    writer.writeByte(7);
+    writer.write(obj.matricula);
+    writer.writeByte(8);
+    writer.write(obj.orientador);
+    writer.writeByte(9);
+    writer.write(obj.tipoPauta);
+    writer.writeByte(10);
+    writer.write(obj.nomeAluno);
   }
 
   @override
