@@ -21,12 +21,11 @@ class _CriarReuniaoPageState extends State<CriarReuniaoPage> {
 
   final _numeroController = TextEditingController();
   final _tipoController = TextEditingController(text: 'Ordinária');
-  final _horaController = TextEditingController();
-  final _localController = TextEditingController();
-  final _notasController = TextEditingController();
+  final _horaController = TextEditingController(text: '14:00');
+  final _localController = TextEditingController(text: 'Sala Virtual');
 
   DateTime? _dataSelecionada;
-  int _statusSelecionado = 1; // Agendada
+  int _statusSelecionado = 0; // Agendada
   final _participantes = <ParticipanteModel>[];
 
   final _nomeParticipanteController = TextEditingController();
@@ -75,7 +74,6 @@ class _CriarReuniaoPageState extends State<CriarReuniaoPage> {
     _tipoController.dispose();
     _horaController.dispose();
     _localController.dispose();
-    _notasController.dispose();
     _nomeParticipanteController.dispose();
     _titulacaoParticipanteController.dispose();
     super.dispose();
@@ -101,8 +99,8 @@ class _CriarReuniaoPageState extends State<CriarReuniaoPage> {
               TextFormField(
                 controller: _numeroController,
                 decoration: const InputDecoration(
-                  labelText: 'Número (ex: 1ª, 2ª, 3ª)',
-                  hintText: '1ª',
+                  labelText: 'Número (ex: 1, 2, 3)',
+                  hintText: '1',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -200,15 +198,7 @@ class _CriarReuniaoPageState extends State<CriarReuniaoPage> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _notasController,
-                maxLines: 3,
-                decoration: const InputDecoration(
-                  labelText: 'Notas (opcional)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+           
               const SizedBox(height: 24),
 
               // Seção de participantes
@@ -463,7 +453,6 @@ class _CriarReuniaoPageState extends State<CriarReuniaoPage> {
       pautas: [],
       participantes: _participantes,
       dataInclusao: DateTime.now(),
-      notas: _notasController.text.isEmpty ? null : _notasController.text,
     );
 
     try {
@@ -492,14 +481,12 @@ class _CriarReuniaoPageState extends State<CriarReuniaoPage> {
 
   String _statusToString(StatusReuniao status) {
     switch (status) {
-      case StatusReuniao.planejamento:
-        return 'Planejamento';
+    
       case StatusReuniao.agendada:
         return 'Agendada';
       case StatusReuniao.realizada:
         return 'Realizada';
-      case StatusReuniao.cancelada:
-        return 'Cancelada';
+      
     }
   }
 }

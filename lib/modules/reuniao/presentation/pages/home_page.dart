@@ -75,12 +75,12 @@ class _HomePageState extends State<HomePage> {
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
               child: ListTile(
-                title: Text('${reuniao.numero} Reunião ${reuniao.tipo}'),
+                title: Text('${reuniao.numero}ª Reunião ${reuniao.tipo}'),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Data: ${DateFormatter.formatDate(reuniao.data)} às ${reuniao.hora}',
+                      'Data: ${DateFormatter.formatDate(reuniao.data)} às ${reuniao.hora} horas',
                     ),
                     Text('Local: ${reuniao.local}'),
                     Text('Pautas: ${reuniao.pautas.length}'),

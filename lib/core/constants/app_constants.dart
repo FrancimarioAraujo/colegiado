@@ -10,14 +10,6 @@ const String address =
 const String defaultCoordinator = 'Eisenhawer de Moura Fernandes';
 const String defaultSecretary = 'Secretário do PPgEE';
 
-// Status da reunião
-const Map<int, String> statusReuniao = {
-  0: 'Planejamento',
-  1: 'Agendada',
-  2: 'Realizada',
-  3: 'Cancelada',
-};
-
 // Tipos de participante
 const Map<int, String> tipoParticipante = {
   0: 'Presidente',

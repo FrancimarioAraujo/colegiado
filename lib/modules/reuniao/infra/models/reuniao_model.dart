@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'pauta_model.dart';
 import 'participante_model.dart';
 
-enum StatusReuniao { planejamento, agendada, realizada, cancelada }
+enum StatusReuniao { agendada, realizada}
 
 @HiveType(typeId: 0)
 class ReuniaoModel {
@@ -36,12 +36,6 @@ class ReuniaoModel {
   @HiveField(9)
   final DateTime? dataAtualizacao;
 
-  @HiveField(10)
-  final String? notas;
-
-  @HiveField(11)
-  final bool temAta; // Se a ata foi criada
-
   ReuniaoModel({
     required this.numero,
     required this.tipo,
@@ -53,8 +47,6 @@ class ReuniaoModel {
     required this.participantes,
     required this.dataInclusao,
     this.dataAtualizacao,
-    this.notas,
-    this.temAta = false,
   });
 
   StatusReuniao get statusEnum => StatusReuniao.values[status];
@@ -84,8 +76,6 @@ class ReuniaoModel {
       participantes: participantes ?? this.participantes,
       dataInclusao: dataInclusao ?? this.dataInclusao,
       dataAtualizacao: dataAtualizacao ?? this.dataAtualizacao,
-      notas: notas ?? this.notas,
-      temAta: temAta ?? this.temAta,
     );
   }
 }

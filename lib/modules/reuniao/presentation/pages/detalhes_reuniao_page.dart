@@ -77,7 +77,6 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
     final horaController = TextEditingController(text: _reuniao!.hora);
     final localController = TextEditingController(text: _reuniao!.local);
     int statusSelecionado = _reuniao!.status;
-    final notasController = TextEditingController(text: _reuniao!.notas ?? '');
     final formKey = GlobalKey<FormState>();
 
     await showDialog<void>(
@@ -170,11 +169,7 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                         decoration: const InputDecoration(labelText: 'Status'),
                       ),
                       const SizedBox(height: 8),
-                      TextFormField(
-                        controller: notasController,
-                        maxLines: 3,
-                        decoration: const InputDecoration(labelText: 'Notas'),
-                      ),
+                   
                     ],
                   ),
                 ),
@@ -194,7 +189,6 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
                         hora: horaController.text,
                         local: localController.text,
                         status: statusSelecionado,
-                        notas: notasController.text.isEmpty ? null : notasController.text,
                         dataAtualizacao: DateTime.now(),
                       );
 
@@ -618,7 +612,7 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${_reuniao!.numero} Reunião ${_reuniao!.tipo}',
+                  '${_reuniao!.numero}ª Reunião ${_reuniao!.tipo}',
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
@@ -635,10 +629,6 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
               'Status:',
               _statusToString(StatusReuniao.values[_reuniao!.status]),
             ),
-            if (_reuniao!.notas != null && _reuniao!.notas!.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              _buildInfoRow('Notas:', _reuniao!.notas!),
-            ],
           ],
         ),
       ),
@@ -916,14 +906,10 @@ class _DetalhesReuniaoPageState extends State<DetalhesReuniaoPage> {
 
   String _statusToString(StatusReuniao status) {
     switch (status) {
-      case StatusReuniao.planejamento:
-        return 'Planejamento';
       case StatusReuniao.agendada:
         return 'Agendada';
       case StatusReuniao.realizada:
         return 'Realizada';
-      case StatusReuniao.cancelada:
-        return 'Cancelada';
     }
   }
 }

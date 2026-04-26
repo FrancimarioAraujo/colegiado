@@ -149,14 +149,13 @@ class PdfGeneratorService {
               style: _base,
             ),
           ),
-
-          pw.SizedBox(height: 40),
-
-          pw.Center(child: pw.Text('__________________________________')),
+          pw.SizedBox(height: 2),
+          pw.Center(child: pw.Text('Eisenhawer de Moura Fernandes', style: _base)),
+           pw.SizedBox(height: 4),
           pw.Center(
             child: pw.Text(
               'Coordenador do PPgEE',
-              style: pw.TextStyle(fontSize: 10),
+              style: _base,
             ),
           ),
         ],

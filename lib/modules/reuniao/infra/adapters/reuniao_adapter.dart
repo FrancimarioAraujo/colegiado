@@ -24,14 +24,13 @@ class ReuniaoAdapter extends TypeAdapter<ReuniaoModel> {
       participantes: (fields[7] as List).cast<ParticipanteModel>(),
       dataInclusao: fields[8] as DateTime,
       dataAtualizacao: fields[9] as DateTime?,
-      notas: fields[10] as String?,
-      temAta: fields[11] as bool? ?? false,
+     
     );
   }
 
   @override
   void write(BinaryWriter writer, ReuniaoModel obj) {
-    writer.writeByte(12);
+    writer.writeByte(10);
     writer.writeByte(0);
     writer.write(obj.numero);
     writer.writeByte(1);
@@ -52,10 +51,6 @@ class ReuniaoAdapter extends TypeAdapter<ReuniaoModel> {
     writer.write(obj.dataInclusao);
     writer.writeByte(9);
     writer.write(obj.dataAtualizacao);
-    writer.writeByte(10);
-    writer.write(obj.notas);
-    writer.writeByte(11);
-    writer.write(obj.temAta);
   }
 
   @override
