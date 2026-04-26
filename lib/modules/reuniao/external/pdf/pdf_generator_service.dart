@@ -135,6 +135,9 @@ class PdfGeneratorService {
             if(pauta.tipoPauta == TipoPauta.prorrogacaoDissertacaoTese){
               return gerarPautaProrrogacaoDissertacaoTese(pauta);
             }
+            if(pauta.tipoPauta == TipoPauta.interrupcao){
+              return gerarPautaInterrupcao(pauta);
+            }
             return gerarOutraPauta(pauta);
           }).toList(),
 
@@ -214,6 +217,94 @@ class PdfGeneratorService {
               ),
             );
   }
+
+  pw.Padding gerarPautaInterrupcao(PautaModel pauta){
+   return  pw.Padding(
+              padding: const pw.EdgeInsets.only(bottom: 10),
+              child: pw.RichText(
+                text: pw.TextSpan(
+                  style: _base,
+                  children: [
+                    pw.TextSpan(
+                      text: '${pauta.numero}. ',
+                      style: _bold,
+                    ),
+                    pw.TextSpan(
+                      text: pauta.titulo,
+                      style: _bold,
+                    ),
+                    if (pauta.processoSei != null &&
+                        pauta.processoSei!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.processoSei!,
+                            style: pw.TextStyle(
+                              color: PdfColor(0, 0, 0.5),
+                              decoration: pw.TextDecoration.underline,
+                              fontWeight: pw.FontWeight.bold,
+                              fontStyle: pw.FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+      if(pauta.nomeAluno != null && pauta.nomeAluno!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.nomeAluno!.toUpperCase(),
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+
+                            ),
+                          ),
+                        ],
+                      ),
+
+                       
+                    if (pauta.matricula != null && pauta.matricula!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.matricula!,
+                        
+                          ),
+                        ],
+                      ),
+
+                      if (pauta.orientador != null && pauta.orientador!.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.orientador!,
+                          
+                          ),
+                        ],
+                      ),
+
+                    if (pauta.descricao.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ${pauta.descricao}'),
+                          if (pauta.adReferendum == true)
+                            pw.TextSpan(
+                              text: ' (Aprovado Ad Referendum)',
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold),
+                            ),
+                        ],
+                      ),
+                  ],
+                ),
+                textAlign: pw.TextAlign.justify,
+              ),
+            );
+  }
+
    pw.Padding gerarPautaProrrogacaoDissertacaoTese(PautaModel pauta){
    return  pw.Padding(
               padding: const pw.EdgeInsets.only(bottom: 10),

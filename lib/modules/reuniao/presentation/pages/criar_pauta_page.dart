@@ -96,7 +96,6 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
         _adReferendum = true;
         break;
       case 'INTERRUPÇÃO DE ESTUDOS':
-        _tituloController.text = 'Interrupção de Estudos';
         _adReferendum = true;
         break;
       case 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL':
@@ -178,7 +177,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
               //   ),
               // ),
            
-              if(_modeloSelecionado != "DIPLOMA" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE" && _modeloSelecionado != "COORIENTAÇÃO" )
+              if(_modeloSelecionado != "DIPLOMA" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE" && _modeloSelecionado != "COORIENTAÇÃO" && _modeloSelecionado != "INTERRUPÇÃO DE ESTUDOS" )
               Container(
                 padding: const EdgeInsets.only(top: 12),
                 child: TextFormField(
@@ -461,6 +460,9 @@ _adicionarPautaDiploma(_nomeAlunoController.text, _processoSeiController.text,_t
                           else if(_modeloSelecionado == "COORIENTAÇÃO"){
                             _adicionarPautaCoorientacao(_nomeProfessorController.text, _descricaoController.text);
                           }
+                          else if(_modeloSelecionado == "INTERRUPÇÃO DE ESTUDOS"){
+                            _adicionarPautaInterrupcao(_processoSeiController.text, _nomeAlunoController.text, _matriculaAlunoController.text, _nomeOrientadorController.text, _descricaoController.text);
+                          }
                           else{
                             _adicionarPauta(null);
                           }
@@ -513,6 +515,22 @@ final pauta = PautaModel(
       adReferendum: _adReferendum,
       fixado: _fixado, tipoPauta: TipoPauta.coorientacao,
       professor: professor,
+    );
+    await _adicionarPauta(pauta);
+  }
+
+      Future<void> _adicionarPautaInterrupcao(String processo, String aluno, String matricula, String orientador, String justificativa) async {
+final pauta = PautaModel(
+      numero: int.parse(_numeroController.text),
+      titulo: "PROCESSO SEI",
+      descricao: justificativa,
+      adReferendum: _adReferendum,
+      fixado: _fixado,
+      matricula: matricula,
+      orientador: orientador,
+      processoSei: processo,
+      nomeAluno: aluno,
+      tipoPauta: TipoPauta.interrupcao,
     );
     await _adicionarPauta(pauta);
   }
