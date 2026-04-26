@@ -23,8 +23,10 @@ class TipoPautaAdapter extends TypeAdapter<TipoPauta> {
         return TipoPauta.coorientacao;
       case 6:
         return TipoPauta.equivalencia;
+      case 7:
+        return TipoPauta.outra;  
       default:
-        return TipoPauta.prorrogacaoPropostaQualificacao;
+        return TipoPauta.outra;
     }
   }
 
@@ -52,6 +54,9 @@ class TipoPautaAdapter extends TypeAdapter<TipoPauta> {
         break;
       case TipoPauta.equivalencia:
         writer.writeByte(6);
+        break;
+      case TipoPauta.outra:
+        writer.writeByte(7);
         break;
     }
   }

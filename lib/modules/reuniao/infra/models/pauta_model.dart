@@ -82,5 +82,6 @@ enum TipoPauta {
   interrupcao,
   aproveitamento,
   coorientacao,
-  equivalencia
+  equivalencia,
+  outra
 }

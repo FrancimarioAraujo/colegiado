@@ -22,8 +22,9 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
       'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL',
       'COORIENTAÇÃO',
       'EQUIVALÊNCIA DE TÍTULO DE MESTRE',
+      'OUTRA',
     ];
-    String _modeloSelecionado = 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO';
+    String _modeloSelecionado = 'OUTRA';
 
     // Controladores para campos variáveis
     final _nomeAlunoController = TextEditingController();
