@@ -128,18 +128,23 @@ class PdfGeneratorService {
           pw.SizedBox(height: 15),
 
           // 🔹 LISTA DE PAUTAS
-          ...reuniao.pautas.map((pauta) {
+          ...List.generate(reuniao.pautas.length, (index){ 
+
+            final pauta = reuniao.pautas[index]; 
             if(pauta.tipoPauta == TipoPauta.prorrogacaoPropostaQualificacao){
-              return gerarPautaProrrogacaoDefesa(pauta);
+              return gerarPautaProrrogacaoDefesa(pauta, index + 1);
             }
             if(pauta.tipoPauta == TipoPauta.prorrogacaoDissertacaoTese){
-              return gerarPautaProrrogacaoDissertacaoTese(pauta);
+              return gerarPautaProrrogacaoDissertacaoTese(pauta, index + 1);
             }
             if(pauta.tipoPauta == TipoPauta.interrupcao){
-              return gerarPautaInterrupcao(pauta);
+              return gerarPautaInterrupcao(pauta, index + 1);
             }
-            return gerarOutraPauta(pauta);
-          }).toList(),
+            if(pauta.tipoPauta == TipoPauta.equivalencia){
+              return gerarPautaEquivalencia(pauta, index + 1);
+            }
+            return gerarOutraPauta(pauta, index + 1);
+          }),
 
           pw.SizedBox(height: 30),
 
@@ -165,7 +170,7 @@ class PdfGeneratorService {
     return doc;
   } 
 
-  pw.Padding gerarOutraPauta(PautaModel pauta){
+  pw.Padding gerarOutraPauta(PautaModel pauta, int index){
     return pw.Padding(
               padding: const pw.EdgeInsets.only(bottom: 10),
               child: pw.RichText(
@@ -173,7 +178,7 @@ class PdfGeneratorService {
                   style: _base,
                   children: [
                     pw.TextSpan(
-                      text: '${pauta.numero}. ',
+                      text: '$index. ',
                       style: _bold,
                     ),
                     pw.TextSpan(
@@ -217,7 +222,7 @@ class PdfGeneratorService {
             );
   }
 
-  pw.Padding gerarPautaInterrupcao(PautaModel pauta){
+  pw.Padding gerarPautaInterrupcao(PautaModel pauta, int index){
    return  pw.Padding(
               padding: const pw.EdgeInsets.only(bottom: 10),
               child: pw.RichText(
@@ -225,7 +230,7 @@ class PdfGeneratorService {
                   style: _base,
                   children: [
                     pw.TextSpan(
-                      text: '${pauta.numero}. ',
+                      text: '$index. ',
                       style: _bold,
                     ),
                     pw.TextSpan(
@@ -304,7 +309,7 @@ class PdfGeneratorService {
             );
   }
 
-   pw.Padding gerarPautaProrrogacaoDissertacaoTese(PautaModel pauta){
+   pw.Padding gerarPautaProrrogacaoDissertacaoTese(PautaModel pauta, int index){
    return  pw.Padding(
               padding: const pw.EdgeInsets.only(bottom: 10),
               child: pw.RichText(
@@ -312,7 +317,7 @@ class PdfGeneratorService {
                   style: _base,
                   children: [
                     pw.TextSpan(
-                      text: '${pauta.numero}. ',
+                      text: '$index. ',
                       style: _bold,
                     ),
                     pw.TextSpan(
@@ -389,7 +394,7 @@ class PdfGeneratorService {
   }
   
 
-  pw.Padding gerarPautaProrrogacaoDefesa(PautaModel pauta){
+  pw.Padding gerarPautaProrrogacaoDefesa(PautaModel pauta, int index){
    return  pw.Padding(
               padding: const pw.EdgeInsets.only(bottom: 10),
               child: pw.RichText(
@@ -397,7 +402,7 @@ class PdfGeneratorService {
                   style: _base,
                   children: [
                     pw.TextSpan(
-                      text: '${pauta.numero}. ',
+                      text: '$index. ',
                       style: _bold,
                     ),
                     pw.TextSpan(
@@ -427,6 +432,75 @@ class PdfGeneratorService {
                         ],
                       ),
 
+                    if (pauta.descricao.isNotEmpty)
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ${pauta.descricao}'),
+                          if (pauta.adReferendum == true)
+                            pw.TextSpan(
+                              text: ' (Aprovado Ad Referendum)',
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold),
+                            ),
+                        ],
+                      ),
+                  ],
+                ),
+                textAlign: pw.TextAlign.justify,
+              ),
+            );
+  }
+
+   pw.Padding gerarPautaEquivalencia(PautaModel pauta, int index){
+   return  pw.Padding(
+              padding: const pw.EdgeInsets.only(bottom: 10),
+              child: pw.RichText(
+                text: pw.TextSpan(
+                  style: _base,
+                  children: [
+                    pw.TextSpan(
+                      text: '$index. ',
+                      style: _bold,
+                    ),
+                    pw.TextSpan(
+                      text: pauta.titulo,
+                      style: _bold,
+                    ),
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.processoSei,
+                            style: pw.TextStyle( 
+                              color: PdfColor(0, 0, 0.5),
+                              decoration: pw.TextDecoration.underline,
+                              fontWeight: pw.FontWeight.bold,
+                              fontStyle: pw.FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                      pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: pauta.nomeAluno!.toUpperCase(),
+                            style: pw.TextStyle( 
+                              fontWeight: pw.FontWeight.bold,
+                              
+                            ),
+                          ),
+                        ],
+                      ),
+  pw.TextSpan(
+                        children: [
+                          pw.TextSpan(text: ' - ', style: _bold),
+                          pw.TextSpan(
+                            text: "Relator: ${pauta.relator}",
+                            
+                          ),
+                        ],
+                      ),
                     if (pauta.descricao.isNotEmpty)
                       pw.TextSpan(
                         children: [

@@ -103,7 +103,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
         _adReferendum = true;
         break;
       case 'EQUIVALÊNCIA DE TÍTULO DE MESTRE':
-        _tituloController.text = 'Equivalência de Título de Mestre';
+        _tituloController.text = 'PROCESSO SEI';
         break;
       default:
         break;
@@ -177,7 +177,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
               //   ),
               // ),
            
-              if(_modeloSelecionado != "DIPLOMA" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE" && _modeloSelecionado != "COORIENTAÇÃO" && _modeloSelecionado != "INTERRUPÇÃO DE ESTUDOS" )
+              if(_modeloSelecionado != "DIPLOMA" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO" && _modeloSelecionado != "PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE" && _modeloSelecionado != "COORIENTAÇÃO" && _modeloSelecionado != "INTERRUPÇÃO DE ESTUDOS" && _modeloSelecionado != "EQUIVALÊNCIA DE TÍTULO DE MESTRE")
               Container(
                 padding: const EdgeInsets.only(top: 12),
                 child: TextFormField(
@@ -215,8 +215,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
               if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
                   _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
                   _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
-                  _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL' ||
-                  _modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE')
+                  _modeloSelecionado == 'APROVEITAMENTO DE DISCIPLINAS DE ALUNO ESPECIAL')
                 ...[
                   
                   Container(
@@ -241,6 +240,42 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     ),
                   ),
                 ],
+
+                if(
+                  _modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE')...[
+ Container(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: TextFormField(
+                      controller: _nomeAlunoController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nome do Aluno',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                    Container(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: TextFormField(
+                      controller: _nomeRelatorController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nome do Relator',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                   Container(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: TextFormField(
+                      controller: _descricaoController,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                        labelText: 'Parecer do Relator',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  ],
+                  
               if (_modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - PROPOSTA/QUALIFICAÇÃO' ||
                   _modeloSelecionado == 'PRORROGAÇÃO DE PRAZO - DISSERTAÇÃO/TESE' ||
                   _modeloSelecionado == 'INTERRUPÇÃO DE ESTUDOS' ||
@@ -348,20 +383,7 @@ class _CriarPautaPageState extends State<CriarPautaPage> {
                     ),
                   ),
                 ],
-              if (_modeloSelecionado == 'EQUIVALÊNCIA DE TÍTULO DE MESTRE')
-                ...[
-                 
-                  Container(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: TextFormField(
-                      controller: _nomeRelatorController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nome do Relator',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
+            
               if (_modeloSelecionado == 'DIPLOMA')
                 ...[
                   
@@ -449,6 +471,9 @@ _adicionarPautaDiploma(_nomeAlunoController.text, _processoSeiController.text,_t
                           else if(_modeloSelecionado == "INTERRUPÇÃO DE ESTUDOS"){
                             _adicionarPautaInterrupcao(_processoSeiController.text, _nomeAlunoController.text, _matriculaAlunoController.text, _nomeOrientadorController.text, _descricaoController.text);
                           }
+                          else if(_modeloSelecionado == "EQUIVALÊNCIA DE TÍTULO DE MESTRE"){
+                            _adicionarPautaEquivalencia(_processoSeiController.text, _nomeAlunoController.text, _nomeRelatorController.text, _descricaoController.text);
+                          } 
                           else{
                             _adicionarPauta(null);
                           }
@@ -475,6 +500,21 @@ _adicionarPautaDiploma(_nomeAlunoController.text, _processoSeiController.text,_t
         ),
       ),
     );
+  }
+
+  Future<void> _adicionarPautaEquivalencia(String processoSei, String aluno, String nomeRelator,  String parecerRelator) async {
+final pauta = PautaModel(
+      numero: int.parse(_numeroController.text),
+      titulo: "PROCESSO SEI",
+      nomeAluno: aluno,
+      relator: nomeRelator,
+      descricao: parecerRelator,
+      processoSei:
+        processoSei,
+      adReferendum: _adReferendum,
+      fixado: _fixado, tipoPauta: TipoPauta.equivalencia,
+    );
+    await _adicionarPauta(pauta);
   }
 
   Future<void> _adicionarPautaDiploma(String nomeAluno, String processoSei, String tipoDefesa) async {

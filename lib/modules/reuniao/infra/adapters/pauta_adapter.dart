@@ -24,12 +24,13 @@ class PautaAdapter extends TypeAdapter<PautaModel> {
       tipoPauta: fields[9] as TipoPauta,
       nomeAluno: fields[10] as String?,
       professor: fields[11] as String?,
+      relator: fields[12] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PautaModel obj) {
-    writer.writeByte(12);
+    writer.writeByte(13);
     writer.writeByte(0);
     writer.write(obj.numero);
     writer.writeByte(1);
@@ -54,6 +55,8 @@ class PautaAdapter extends TypeAdapter<PautaModel> {
     writer.write(obj.nomeAluno);
     writer.writeByte(11);
     writer.write(obj.professor);
+    writer.writeByte(12);
+    writer.write(obj.relator);
   }
 
   @override

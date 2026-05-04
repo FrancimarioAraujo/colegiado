@@ -28,6 +28,8 @@ class PautaModel {
   final String? nomeAluno;
   @HiveField(11)
   final String? professor;
+  @HiveField(12)
+  final String? relator;
 
   PautaModel({
     required this.numero,
@@ -42,6 +44,7 @@ class PautaModel {
     required this.tipoPauta,
     this.nomeAluno,
     this.professor,
+    this.relator,
   });
 
   PautaModel copyWith({
@@ -57,6 +60,7 @@ class PautaModel {
     String? nomeAluno,
     required TipoPauta tipoPauta,
     String? professor,
+    String? relator,
   }) {
     return PautaModel(
       numero: numero ?? this.numero,
@@ -71,6 +75,7 @@ class PautaModel {
       tipoPauta: tipoPauta,
       nomeAluno: nomeAluno ?? this.nomeAluno,
       professor: professor ?? this.professor,
+      relator: relator,
     );
   }
 }
